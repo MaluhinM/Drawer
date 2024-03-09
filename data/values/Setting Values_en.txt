@@ -1,0 +1,45 @@
+The <values> folder stores the values on which the behavior of the program depends.
+If necessary, the parameter values can be changed.
+To change the parameters, you need to enter the value you need in a specific text file.
+Depending on the selected file, a certain parameter will change.
+The list of default parameters is shown at the bottom:
+
+The <base> folder contains files responsible for the usual movement of the Turtle performer in the program:
+forward - moving forward (10)
+backward - move backwards (10)
+left - turn left by 90° (90)
+right - turn right by 90° (90)
+
+The <shift> folder contains files responsible for movement using the Shift key:
+shift_forward - enhanced forward movement (20)
+shift_backward - enhanced backward movement (20)
+shift_left - 45° left turn (45)
+shift_right - 45° right turn (45)
+
+The <ctrl> folder contains files responsible for movement using the Ctrl key:
+ctrl_forward - weak forward movement (1)
+ctrl_backward - weak backward movement (1)
+ctrl_left - turn left by 5° (5)
+ctrl_right - turn right by 5° (5)
+
+The <figures> folder contains folders with names of shapes, inside which there are files responsible for drawing certain shapes by the performer:
+<figure_circle> - circle
+ {figure_circle} - radius of the circle (10)
+<figure_snowflake> - snowflake
+ {figure_snowflake, - number of repetitions (4)
+forward, - forward movement (20)
+backward, - backward movement (20)
+left, - left turn by 45° (45)
+right} - right turn by 45° (45)
+
+The <other> folder contains files in which the value 1 is enabled, 0 (or other characters) is disabled. By default, everything is enabled:
+exit - shutdown of the program (1)
+clear - reset the canvas (1)
+reset_heading - reset the rotation of the performer (1)
+undo - undo action (1)
+pen - raising/lowering the "handle" of the performer (1)
+
+Please note that if an invalid value is specified in the files,
+the program will refuse to work and notify you of this with a window indicating an error.
+To fix the problem, roll back the changes to their original appearance.
+The universal method of solving problems is to reinstall the program.

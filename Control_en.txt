@@ -1,0 +1,30 @@
+The basic default control is shown below, without any changes in the program settings.
+The keys or key combination are written in angle brackets ('<' and '>').
+On the contrary, the action that the program must perform when using a particular key or combination of keys is indicated.
+The mini-game has the following features:
+
+- Basic movement:
+-> Is performed by pressing the buttons: <w>, <a>, <s>, <d>. Where ...
+--> <w> - Forward movement
+--> <a> - Move to the left
+--> <s> - Moving backwards
+--> <d> - Move to the right
+
+- Moving with the Shift key pressed:
+-> The same keys are used as for the main movement, but with the Shift key additionally pressed
+
+- Moving with the Ctrl key pressed:
+-> The same keys are used as for the main movement, but with the Ctrl key additionally pressed
+
+- Other functions:
+-> <Esc> - Program shutdown
+-> <Del> (<Delete>) - Cleaning
+-> <Tab> - Raising/lowering the 'pen'
+-> <Ctrl + z> - Cancel the operation
+-> <F12> - Reset the rotation parameter (Reset the direction)
+
+- The program also uses 'shapes', which are internal mutable algorithms of the program.
+They perform a certain sequence of actions, which is usually aimed at drawing certain shapes.
+You can create shapes yourself, but the program already has 2 by default:
+-> <1> - Circle
+-> <2> - Snowflake

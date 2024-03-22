@@ -1,4 +1,5 @@
-print('Импорт библиотек...')
+print('Запуск программы...')
+print('Импорт библиотек: ', end='') # Вывод информации в консоль
 # Импорт библиотек
 import turtle # Для рисования
 import keyboard # Для управления
@@ -6,9 +7,14 @@ from tkinter import * # Для создания окон ошибок
 from os import path # Для проверки существования путей
 from sys import exit # Для завершения работы программы
 from glob import glob # Для просмотра файлов
-print('Библиотеки загружены')
+print('Выполнено') # Вывод информации в консоль
 
-print('Расчет значений...')
+print('Расчет значений: ', end='') # Вывод информации в консоль
+
+causes = {'Несуществующий путь': 'Отсутствует необходимый для работы программы файл',
+          'Несуществующие пути': 'Отсутствуют необходимые для работы программы файлы',
+          'Неверное значение': 'Программа получила недопустимое значение на вход из определенного файла'}
+causes_keys = tuple(causes.keys())
 
 data_folder = fr'data' # Основная папка <data>. В ней соддержатся все данные
 hotkeys_folder = fr'{data_folder}\hotkeys' # Папка <hotkeys>. Хранит клавиши или сочетание клавиш для управления
@@ -40,36 +46,42 @@ other_keys = ('exit', 'clear', 'reset_heading', 'pen', 'undo') # Прочие ф
 
 keys = (base_keys, shift_keys, ctrl_keys, other_keys) # Переменная для хранения функций
 
-print('Значения расчитаны\n',)
+print('Выполнено') # Вывод информации в консоль
 
 # Проверка целостности программы
 def integrity_check():
-    print('Проверка целостности программы...')
-    if not path.exists(data_folder): raise_error('Несуществующий путь', f'Отсутствует папка <{data_folder}>')
-    print(f'Папка <{data_folder}> проверена')
-    if not path.exists('figures.py'): raise_error('Несуществующий путь', 'Отсутствует файл <figures.py>')
+    print('\nПроверка целостности программы...') # Вывод информации в консоль
 
-    exist = [0] * len(hotkeys)
-    for i in range(len(hotkeys)):
-        if path.exists(hotkeys[i]): exist[i] = 1
-    if 0 in exist:  # Если есть отсутствующие пути
-        errors = []  # Объявление массива с ошибками
-        for i in range(len(hotkeys)):  # Цикл проверки
-            if exist[i] == 0: errors.append('\n' + hotkeys[i])  # Если отсутствует, то записывает отсутствующий путь в массив
-        if len(errors) == 1:
-            txt = 'Несуществующий путь'
-            amount = 'Отсутствует путь: '
-        else:
-            txt = 'Несуществующие пути'
-            amount = 'Отсутствуют пути:\n'
-        raise_error(txt, amount + ', '.join(errors) + '\n\nПереустановите программу')
+    print(f'Проверка папки <{data_folder}>: ', end='')
+    if not path.exists(data_folder): raise_error(causes_keys[0], f'Отсутствует папка <{data_folder}>') # Проверка наличия папки. В случае ее отсутствия - вызывается ошибка
+    print('Выполнено') # Вывод информации в консоль
 
-    n = 0
-    for i in range(len(keys)):
-        for g in range(len(keys[i])): n += 1
-    exist = [0] * n
+    print(f'Проверка файла <figures.py>: ', end='')
+    if not path.exists('figures.py'): raise_error(causes_keys[0], 'Отсутствует файл <figures.py>') # Проверка наличия папки. В случае ее отсутствия - вызывается ошибка
+    print('Выполнено')
 
-    n = 0
+    print(f'Проверка папки <{hotkeys_folder}>: ', end='')
+    exist = [0] * len(hotkeys) # Создание списка для отметки наличия путей
+    for i in range(len(hotkeys)): # Цикл проверки наличия путей
+        if path.exists(hotkeys[i]): exist[i] = 1 # Наличие пути отмечается в списке
+    if 0 in exist: # Если есть отсутствующие пути
+        errors = [] # Объявление списка с ошибками
+        for i in range(len(hotkeys)): # Цикл проверки
+            if exist[i] == 0: errors.append('\n' + hotkeys[i]) # Если отсутствует, то записывает отсутствующий путь в список
+        if len(errors) == 1: # Если отсутствует всего один путь
+            txt = causes_keys[0] # Оглавление ошибки в единственном числе
+            amount = 'Отсутствует путь: ' # Информация об ошибке в единственном числе
+        else: # Если количество отсутствующих больше одного
+            txt = causes_keys[1] # Оглавление ошибки во множественном числе
+            amount = 'Отсутствуют пути:\n' # Информация об ошибке во множественном числе
+        raise_error(txt, amount + ', '.join(errors)) # Вызов соответствующей ошибки
+
+    n = 0 # Счетчик количества путей
+    for i in range(len(keys)): # Цикл для счетчика
+        for g in range(len(keys[i])): n += 1 # Счет количества путей
+    exist = [0] * n # Создание списка для записи несуществующих путей
+
+    n = 0 # Счетчик
     for i in range(len(keys)):
         for g in range(len(keys[i])):
             if path.exists(f'{hotkeys[i]}\\{keys[i][g]}.txt'): exist[n] = 1
@@ -82,14 +94,15 @@ def integrity_check():
                 if exist[n] == 0: errors.append(f'\n{hotkeys[i]}\\{keys[i][g]}.txt')  # Если отсутствует, то записывает отсутствующий путь в массив
                 n += 1
         if len(errors) == 1:
-            txt = 'Несуществующий путь'
+            txt = causes_keys[0]
             amount = 'Отсутствует путь: '
         else:
-            txt = 'Несуществующие пути'
+            txt = causes_keys[1]
             amount = 'Отсутствуют пути:\n'
-        raise_error(txt, amount + ', '.join(errors) + '\n\nПереустановите программу')
-    print(f'Путь <{hotkeys_folder}> и его содержимое проверено')
+        raise_error(txt, amount + ', '.join(errors))
+    print('Выполнено') # Вывод информации в консоль
 
+    print(f'Проверка папки <{values_folder}>: ', end='')
     exist = [0] * len(vls)
     for i in range(len(vls)):
         if path.exists(vls[i]): exist[i] = 1
@@ -98,38 +111,33 @@ def integrity_check():
         for i in range(len(vls)):  # Цикл проверки
             if exist[i] == 0: errors.append('\n' + vls[i])  # Если отсутствует, то записывает отсутствующий путь в массив
         if len(errors) == 1:
-            txt = 'Несуществующий путь'
+            txt = causes_keys[0]
             amount = 'Отсутствует путь: '
         else:
-            txt = 'Несуществующие пути'
+            txt = causes_keys[1]
             amount = 'Отсутствуют пути:\n'
-        raise_error(txt, amount + ', '.join(errors) + '\n\nПереустановите программу')
-    print(f'Путь <{values_folder}> и его содержимое проверено\n')
+        raise_error(txt, amount + ', '.join(errors))
+    print('Выполнено') # Вывод информации в консоль
+def FindPossibleCause(error):
+    if error in causes: return causes[error] + '\nЕсли Вы не трогали файлы, содержащиеся в директории программы, то единственным выходом будет переустановка программы.\nВ противном случае, попробуйте откатить совершенные изменения. Если ошибка все равно остается - также переустановите программу'
+    return 'Не удалось определить причину'
 # Вызов ошибки
 def raise_error(title, txt):
-    print('Ошибка:', title)
+    print('Программа столкнулась с ошибкой\nОшибка:', title) # Вывод информации в консоль
+    print('Возможная причина:', FindPossibleCause(title))
     win = Tk()  # Создание окна для сообщения о проблеме с целостностью программы
-    win['bg'] = 'red'  # Цвет окна
     win.resizable(False, False)  # Отключение возможности изменения размера
     win.title(title)  # Имя окна
-    Label(win, text=txt, font='Arial 15', bg='black', fg='red').pack()  # Создание и отрисовка лейбла с найденными ошибками и призыву к переустановке программы
+    Label(win, text=f'{txt}\n\nПереустановите программу', font='Arial 15', bg='black', fg='red').pack()  # Создание и отрисовка лейбла с найденными ошибками и призыву к переустановке программы
+    keyboard.add_hotkey('Esc', lambda: win.destroy())
     win.mainloop()  # Ждем закрытия окна
     exit()
 
-def add_hotkey(x, figures_keys, values): keyboard.add_hotkey(figures_keys[x], lambda: exec(f'{x}({values[x]})')) # Добавление горячей клавиши для управления
-
-# Поднять\опустить 'ручку'
-def pen():
-    if turtle.isdown():
-        print('Поднимаю ручку...')
-        turtle.penup()
-    elif not turtle.isdown():
-        print('Опускаю ручку...')
-        turtle.pendown()
+def add_hotkey(x, figures_keys, values): keyboard.add_hotkey(figures_keys[x], lambda: eval(f'{x}({values[x]})')) # Добавление горячей клавиши для управления
 
 # Основная программа
 def start():
-    print('Загрузка и распределение значений...')
+    print('\nЗагрузка и распределение значений...') # Вывод информации в консоль
     title_path = fr'{data_folder}\title.txt'
     if path.exists(title_path):
         with open(title_path, 'r', encoding='utf-8') as f: title_name = f.read().strip()
@@ -137,7 +145,7 @@ def start():
         title_name = 'The Minigame by Malukhin Miron -2024 ©️'
         with open(title_path, 'w', encoding='utf-8') as f: f.write(title_name)
     turtle.title(title_name)
-    print('Имя окна:', title_name)
+    print('Имя окна:', title_name) # Вывод информации в консоль
 
     speed_path = fr'{data_folder}\speed.txt'
     if path.exists(speed_path):
@@ -146,9 +154,10 @@ def start():
         speed = '6'
         with open(speed_path, 'w', encoding='utf-8') as f: f.write(speed)
     if speed.isdigit(): turtle.speed(int(speed))
-    else: raise_error('Неверное значение', f'Значение по пути <{data_folder}\speed.txt> не является натуральным числом')
-    print('Установлена скорость:', speed)
+    else: raise_error(causes_keys[2], f'Значение <{speed}> по пути <{data_folder}\speed.txt> не является натуральным числом')
+    print('Установлена скорость:', speed) # Вывод информации в консоль
 
+    print(f'Распределение значений движения: ', end='')
     v = {}
     for i in vls:
         v[i.replace(f'{values_folder}\\', '')] = {}
@@ -158,8 +167,9 @@ def start():
     base = v['base']
     shift = v['shift']
     ctrl = v['ctrl']
-    print('Значения движения распределены')
+    print('Выполнено') # Вывод информации в консоль
 
+    print(f'Распределение клавиш: ', end='')
     hk = {}
     for i in range(len(hotkeys)):
         if list(hotkeys)[i].replace(f'{hotkeys_folder}\\', '') == 'other':
@@ -169,26 +179,29 @@ def start():
                     if f.read() == '1':
                         with open(f'{hotkeys[i]}\\{g}.txt', 'r', encoding='utf-8') as f: hk[g] = f.read()
                         continue
-                print(f'Функция {g} отключена')
                 hk[g] = ''
+                print(f'Функция {g} отключена') # Вывод информации в консоль
             continue
         for g in keys[i]:
             with open(f'{hotkeys[i]}\\{g}.txt', 'r', encoding='utf-8') as f: hk[g] = f.read()
-    print('Клавиши движения и прочих функций распределены')
+    print('Выполнено') # Вывод информации в консоль
 
+    print(f'Запись фигур: ', end='')
     figures = []
     for file in glob(f'{figures_folder}\*'):
         f = open(file, 'r', encoding='utf-8')
         if f.read() == '1': figures.append(file.replace(f'{figures_folder}\\', '').replace('.txt', ''))
         else: print('Фигура', file.replace(f'{figures_folder}\\', '').replace('.txt', ''), 'отключена')
-    print('Фигуры записаны')
+    print('Выполнено') # Вывод информации в консоль
 
+    print(f'Распределение клавиш вызова фигур: ', end='')
     figures_keys = {}
     for file in glob(f'{hotkeys_figures}\*'):
         f = open(file, 'r', encoding='utf-8')
         figures_keys[file.replace(f'{hotkeys_figures}\\', '').replace('.txt', '')] = f.read()
-    print('Клавиши для вызова фигур распределены')
+    print('Выполнено') # Вывод информации в консоль
 
+    print(f'Распределение значений фигур: ', end='')
     values = {}
     for file in glob(fr'{values_figures}\*'):
         a = {}
@@ -196,11 +209,13 @@ def start():
             f = open(n, 'r', encoding='utf-8')
             a[n.replace(f'{file}\\', '').replace('.txt', '')] = int(f.read())
         else: values[file.replace(f'{values_figures}\\', '')] = a
-    print('Значения фигур распределены')
+    print('Выполнено') # Вывод информации в консоль
 
+    print(f'Применение значений фигур: ', end='')
     for i in figures: add_hotkey(i, figures_keys, values)
-    print('Значения фигур применены')
+    print('Выполнено') # Вывод информации в консоль
 
+    print(f'Настройка функций: ', end='')
     keyboard.add_hotkey(hk['forward'], lambda: turtle.forward(base['forward']))
     keyboard.add_hotkey(hk['backward'], lambda: turtle.backward(base['backward']))
     keyboard.add_hotkey(hk['left'], lambda: turtle.left(base['left']))
@@ -224,13 +239,19 @@ def start():
         keyboard.add_hotkey(hk['undo'], lambda: turtle.undo())
     if hk['pen'] != '':
         keyboard.add_hotkey(hk['pen'], pen)
-    print('Функции настроены\n')
+    print('Выполнено') # Вывод информации в консоль
 
-    print('Запуск...')
+    print('\nЗапуск...') # Вывод информации в консоль
     turtle.mainloop()
-    print('Завершение работы программы...')
+    print('Завершение работы программы...') # Вывод информации в консоль
     exit()
 
 integrity_check() # Проверка целостности программы
 from figures import * # Для просмотра алгоритмов фигур в файле <figures.py>
+
+# Поднять\опустить 'ручку'
+def pen():
+    if turtle.isdown(): turtle.penup()
+    elif not turtle.isdown(): turtle.pendown()
+
 start() # Если все пути существуют, то запускаем основную программу

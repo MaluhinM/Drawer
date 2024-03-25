@@ -12,15 +12,26 @@ def write(name, key):
           f'и задать необходимые значения в созданной папке <data\\values\\figures\\{name.replace("data/figures/", "")}>')
     input('Enter для завершения работы программы: ')
 
+CannotBeUsed = ' \\/:*?"<>|'
 while True:
-    name = input('Название новой фигуры (желательно на английском): ')
+    symbols = []
+    name = input('Название новой фигуры (желательно на английском): ').strip()
     if path.exists(fr'data\figures\{name}.txt') or path.exists(fr'data\figures\figure_{name}.txt'):
         print(f'\nФигура <{name.replace("figure_", "")}> уже существует. Придумайте что-то новое')
         continue
+    for i in name:
+        if i not in symbols and i in CannotBeUsed: symbols.append(i)
+    if symbols != '':
+        if len(symbols) == 1:
+            print(f'В названии присутствует недопустимый символ: {symbols}')
+            continue
+        elif len(symbols) > 1:
+            print(f'В названии присутствуют недопустимые символы: {symbols}')
+            continue
     if name[:7] != 'figure_': name = 'figure_' + name
     break
 while True:
-    key = input('Клавиша для использования фигуры (возможно сочетание): ')
+    key = input('Клавиша для использования фигуры (возможно сочетание): ').strip()
 
     try: add_hotkey(key, lambda: print(end=''))
     except:

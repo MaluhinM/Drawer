@@ -6,7 +6,6 @@ If you want to look at the program from the command line, you should run the fil
 Details:
 The file 'Minigame -2024.exe' runs the main algorithm of the program, which uses the following files\folders:
 -> <figures.py> stores algorithms of 'shapes' that can be called by certain keys or keyboard shortcuts.
--> <__pycache__> - a folder that stores a cache for reading information about algorithms from a file <figures.py>.
 -> <data> is the main folder with information for the operation of the program, which is also a folder for configuring the program.
 
 There is also a program in the files <CreateNewFigure.exe> to simplify the creation of 'shapes' (algorithms).

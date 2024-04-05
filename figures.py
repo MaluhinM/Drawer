@@ -1,9 +1,10 @@
 from turtle import *
 
 
-def figure_circle(x):
-    circle(x['radius'])
+# Круг
+def figure_circle(x): circle(x['radius'])
 
+# Снежинка
 def figure_snowflake(x):
     forward(x['distance']*2)
     for i in range(x['repeat']):
@@ -24,3 +25,14 @@ def figure_snowflake(x):
         right(x['angle'])
         forward(x['distance'])
     backward(x['distance']*2)
+
+# Квадрат
+def figure_square(x):
+	for i in range(x['repeat']):
+		forward(x['distance'])
+		left(x['angle'])
+
+# Квадрат с перемещением вперед
+def figure_SHIFTsquare(x):
+	figure_square(x)
+	forward(x['distance'])

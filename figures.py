@@ -34,5 +34,7 @@ def figure_square(x):
 
 # Квадрат с перемещением вперед
 def figure_SHIFTsquare(x):
-	figure_square(x)
+	for i in range(x['repeat']):
+		forward(x['distance'])
+		left(x['angle'])
 	forward(x['distance'])
